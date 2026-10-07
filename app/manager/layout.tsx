@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Suspense } from "react";
 import { ManagerDashboardShell } from "@/components/manager-dashboard-shell";
 
 export default function ManagerLayout({
@@ -6,5 +7,9 @@ export default function ManagerLayout({
 }: {
   children: ReactNode;
 }) {
-  return <ManagerDashboardShell>{children}</ManagerDashboardShell>;
+  return (
+    <Suspense fallback={null}>
+      <ManagerDashboardShell>{children}</ManagerDashboardShell>
+    </Suspense>
+  );
 }
