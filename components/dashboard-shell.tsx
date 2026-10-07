@@ -6,6 +6,7 @@ import { useAuth } from "@/components/auth-context";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage } from "@/lib/error-message";
 
@@ -68,9 +69,8 @@ export function DashboardShell({
     setIsLoggingOut(true);
 
     try {
-      const response = await fetch(`${backendUrl}/api/v1/auth/logout`, {
+      const response = await apiFetch(`${backendUrl}/api/v1/auth/logout`, {
         method: "POST",
-        credentials: "include",
       });
 
       const data = await response.json().catch(() => ({}));

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -81,11 +82,10 @@ export function ManagerDashboardPage() {
       setLoadError("");
 
       try {
-        const response = await fetch(`${backendUrl}/api/v1/manager/dashboard`, {
+        const response = await apiFetch(`${backendUrl}/api/v1/manager/dashboard`, {
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         });
         const data = await response.json().catch(() => ({}));
 

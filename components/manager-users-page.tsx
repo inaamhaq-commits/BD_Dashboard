@@ -10,6 +10,7 @@ import {
   type Client,
 } from "@/components/client-data";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -103,11 +104,10 @@ async function fetchRows(url: string) {
   const timeout = window.setTimeout(() => controller.abort(), 8000);
 
   try {
-    const response = await fetch(url, {
+    const response = await apiFetch(url, {
       headers: {
         accept: "application/json",
       },
-      credentials: "include",
       signal: controller.signal,
     });
     const data = await response.json().catch(() => ({}));
@@ -270,11 +270,10 @@ export function ManagerUsersPage() {
       setLoadError("");
 
       try {
-        const response = await fetch(`${backendUrl}/api/v1/manager/users`, {
+        const response = await apiFetch(`${backendUrl}/api/v1/manager/users`, {
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         });
         const data = await response.json().catch(() => ({}));
 

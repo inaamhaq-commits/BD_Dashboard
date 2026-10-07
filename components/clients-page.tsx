@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -228,11 +229,10 @@ export function ClientsPage() {
       setLoadError("");
 
       try {
-        const response = await fetch(`${backendUrl}/api/v1/clients`, {
+        const response = await apiFetch(`${backendUrl}/api/v1/clients`, {
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         });
         const data = await response.json();
 
@@ -269,11 +269,10 @@ export function ClientsPage() {
 
     async function loadProfiles() {
       try {
-        const response = await fetch(`${backendUrl}/api/v1/profiles`, {
+        const response = await apiFetch(`${backendUrl}/api/v1/profiles`, {
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         });
         const data = await response.json().catch(() => []);
 
@@ -362,14 +361,13 @@ export function ClientsPage() {
         ...form,
         score: qualifiedScoreToScore(scoreToQualifiedScore(form.score)),
       };
-      const response = await fetch(url, {
+      const response = await apiFetch(url, {
         method: isEditing ? "PATCH" : "POST",
         headers: {
           accept: "application/json",
           "content-type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include",
       });
       const data = await response.json();
 

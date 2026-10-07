@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -191,11 +192,10 @@ function getErrorMessage(data: unknown, fallback: string) {
 }
 
 async function fetchProfiles() {
-  const response = await fetch(`${backendUrl}/api/v1/profiles`, {
+  const response = await apiFetch(`${backendUrl}/api/v1/profiles`, {
     headers: {
       accept: "application/json",
     },
-    credentials: "include",
   });
   const data = await response.json().catch(() => []);
 
@@ -281,13 +281,12 @@ export function SettingsPage() {
     setIsCreatingProfile(true);
 
     try {
-      const response = await fetch(`${backendUrl}/api/v1/profiles`, {
+      const response = await apiFetch(`${backendUrl}/api/v1/profiles`, {
         method: "POST",
         headers: {
           accept: "application/json",
           "content-type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(profileForm),
       });
       const data = await response.json().catch(() => ({}));
@@ -322,14 +321,13 @@ export function SettingsPage() {
     setDeletingProfileId(profile.id);
 
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${backendUrl}/api/v1/profiles/${profile.id}`,
         {
           method: "DELETE",
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         }
       );
       const data = await response.json().catch(() => ({}));

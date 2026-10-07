@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -161,11 +162,10 @@ function mapBackendProject(project: BackendProject): Project {
 }
 
 async function fetchProjects() {
-  const response = await fetch(`${backendUrl}/api/v1/projects`, {
+  const response = await apiFetch(`${backendUrl}/api/v1/projects`, {
     headers: {
       accept: "application/json",
     },
-    credentials: "include",
   });
   const data = await response.json();
 
@@ -337,11 +337,10 @@ export function KnowledgeBasePage() {
   }
 
   async function refreshProject(projectId: string) {
-    const response = await fetch(`${backendUrl}/api/v1/projects/${projectId}`, {
+    const response = await apiFetch(`${backendUrl}/api/v1/projects/${projectId}`, {
       headers: {
         accept: "application/json",
       },
-      credentials: "include",
     });
     const data = await response.json();
 
@@ -382,14 +381,13 @@ export function KnowledgeBasePage() {
         })),
       };
 
-      const createResponse = await fetch(`${backendUrl}/api/v1/projects`, {
+      const createResponse = await apiFetch(`${backendUrl}/api/v1/projects`, {
         method: "POST",
         headers: {
           accept: "application/json",
           "content-type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include",
       });
       const createData = await createResponse.json();
 
@@ -423,14 +421,13 @@ export function KnowledgeBasePage() {
         })
       );
 
-      const completeResponse = await fetch(
+      const completeResponse = await apiFetch(
         `${backendUrl}/api/v1/projects/${createdProject.project_id}/complete`,
         {
           method: "POST",
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         }
       );
       const completeData = await completeResponse.json();

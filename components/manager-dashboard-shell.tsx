@@ -6,6 +6,7 @@ import { useAuth } from "@/components/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -160,11 +161,10 @@ export function ManagerDashboardShell({ children }: ManagerDashboardShellProps) 
       setUsersError("");
 
       try {
-        const response = await fetch(`${backendUrl}/api/v1/manager/users`, {
+        const response = await apiFetch(`${backendUrl}/api/v1/manager/users`, {
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         });
         const data = await response.json().catch(() => ({}));
 
@@ -238,9 +238,8 @@ export function ManagerDashboardShell({ children }: ManagerDashboardShellProps) 
     setIsLoggingOut(true);
 
     try {
-      const response = await fetch(`${backendUrl}/api/v1/auth/logout`, {
+      const response = await apiFetch(`${backendUrl}/api/v1/auth/logout`, {
         method: "POST",
-        credentials: "include",
       });
       const data = await response.json().catch(() => ({}));
 
@@ -275,13 +274,12 @@ export function ManagerDashboardShell({ children }: ManagerDashboardShellProps) 
     }));
 
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${backendUrl}/api/v1/manager/users/${userId}/profiles`,
         {
           headers: {
             accept: "application/json",
           },
-          credentials: "include",
         }
       );
       const data = await response.json().catch(() => ({}));

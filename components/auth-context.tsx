@@ -7,6 +7,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+import { clearAuthTokens, storeAuthTokens } from "@/lib/api";
 
 export type UserRole = "user" | "manager";
 
@@ -108,11 +109,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isReady: true,
       setUserFromResponse(data, fallbackEmail) {
         const nextUser = normalizeUser(data, fallbackEmail);
+        storeAuthTokens(data);
         window.localStorage.setItem(storageKey, JSON.stringify(nextUser));
         window.dispatchEvent(new Event(authStorageEvent));
         return nextUser;
       },
       clearUser() {
+        clearAuthTokens();
         window.localStorage.removeItem(storageKey);
         window.dispatchEvent(new Event(authStorageEvent));
       },

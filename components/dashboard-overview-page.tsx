@@ -11,6 +11,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { useToast } from "@/components/toast-provider";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 
@@ -146,13 +147,12 @@ export function DashboardOverviewPage() {
       setLoadError("");
 
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${backendUrl}/api/v1/dashboard/overview?range=${selectedRange}`,
           {
             headers: {
               accept: "application/json",
             },
-            credentials: "include",
           }
         );
         const data = (await readJsonResponse(

@@ -15,6 +15,7 @@ import {
   getScoreTone,
   mapBackendClient,
 } from "@/components/client-data";
+import { apiFetch } from "@/lib/api";
 import { backendUrl } from "@/lib/backend";
 import { getErrorMessage as getBackendErrorMessage } from "@/lib/error-message";
 import {
@@ -280,11 +281,10 @@ export function ClientConversationWorkspace({
   const canUseConversation = Boolean(conversationId);
 
   const loadConversation = useCallback(async (id: string) => {
-    const response = await fetch(`${backendUrl}/api/v1/conversations/${id}`, {
+    const response = await apiFetch(`${backendUrl}/api/v1/conversations/${id}`, {
       headers: {
         accept: "application/json",
       },
-      credentials: "include",
     });
     const data = (await readJsonResponse(
       response,
@@ -327,17 +327,15 @@ export function ClientConversationWorkspace({
       try {
         const [clientResponse, conversationsResponse] =
           await Promise.all([
-            fetch(`${backendUrl}/api/v1/clients/${clientId}`, {
+            apiFetch(`${backendUrl}/api/v1/clients/${clientId}`, {
               headers: {
                 accept: "application/json",
               },
-              credentials: "include",
             }),
-            fetch(`${backendUrl}/api/v1/conversations?client_id=${clientId}`, {
+            apiFetch(`${backendUrl}/api/v1/conversations?client_id=${clientId}`, {
               headers: {
                 accept: "application/json",
               },
-              credentials: "include",
             }),
           ]);
         const clientData = (await readJsonResponse(
@@ -468,7 +466,7 @@ export function ClientConversationWorkspace({
     setSuggestion(null);
 
     try {
-      const response = await fetch(`${backendUrl}/api/v1/conversations/${id}/suggest`, {
+      const response = await apiFetch(`${backendUrl}/api/v1/conversations/${id}/suggest`, {
         method: "POST",
         headers: {
           accept: "application/json, text/event-stream, text/plain",
@@ -478,7 +476,6 @@ export function ClientConversationWorkspace({
           message_id: messageId,
           limit: 5,
         }),
-        credentials: "include",
       });
       const nextSuggestion = await readSuggestionResponse(response);
 
@@ -500,7 +497,7 @@ export function ClientConversationWorkspace({
 
     try {
       const id = await ensureConversation();
-      const response = await fetch(
+      const response = await apiFetch(
         `${backendUrl}/api/v1/conversations/${id}/messages`,
         {
           method: "POST",
@@ -512,7 +509,6 @@ export function ClientConversationWorkspace({
             sender_type: "client",
             message_text: trimmed,
           }),
-          credentials: "include",
         }
       );
       const data = (await readJsonResponse(
@@ -542,7 +538,7 @@ export function ClientConversationWorkspace({
     if (!trimmed || !suggestion || !conversationId) return false;
 
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${backendUrl}/api/v1/conversations/${conversationId}/suggestions/${suggestion.id}`,
         {
           method: "PATCH",
@@ -553,7 +549,6 @@ export function ClientConversationWorkspace({
           body: JSON.stringify({
             suggested_response: trimmed,
           }),
-          credentials: "include",
         }
       );
       const data = (await readJsonResponse(
@@ -588,7 +583,7 @@ export function ClientConversationWorkspace({
 
       if (!savedEdit) return;
 
-      const response = await fetch(
+      const response = await apiFetch(
         `${backendUrl}/api/v1/conversations/${conversationId}/suggestions/${suggestion.id}/finalize`,
         {
           method: "POST",
@@ -599,7 +594,6 @@ export function ClientConversationWorkspace({
           body: JSON.stringify({
             finalized_response: trimmed,
           }),
-          credentials: "include",
         }
       );
       const data = (await readJsonResponse(
@@ -652,7 +646,7 @@ export function ClientConversationWorkspace({
     setIsCoachLoading(true);
 
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${backendUrl}/api/v1/conversations/${conversationId}/coach`,
         {
           method: "POST",
@@ -664,7 +658,6 @@ export function ClientConversationWorkspace({
             question: trimmed,
             draft_response: suggestedReply,
           }),
-          credentials: "include",
         }
       );
       const data = (await readJsonResponse(
@@ -701,7 +694,7 @@ export function ClientConversationWorkspace({
     setSavingStage(stage);
 
     try {
-      const response = await fetch(`${backendUrl}/api/v1/clients/${client.id}`, {
+      const response = await apiFetch(`${backendUrl}/api/v1/clients/${client.id}`, {
         method: "PATCH",
         headers: {
           accept: "application/json",
@@ -710,7 +703,6 @@ export function ClientConversationWorkspace({
         body: JSON.stringify({
           [stage]: checked,
         }),
-        credentials: "include",
       });
       const data = (await readJsonResponse(
         response,
